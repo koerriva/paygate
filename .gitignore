@@ -2,5 +2,4 @@
 dist/
 /java/HttpsRequest.class
 /java/Utils.class
-/cert/apiclient_cert.p12
-/cert/apiclient_cert_app.p12
+/cert/

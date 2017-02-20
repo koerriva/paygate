@@ -3,9 +3,10 @@ module Type where
 import Control.Monad.Reader
 import Control.Monad.State
 import Control.Monad.Writer
--- import Data.HashMap
--- import Data.Binary.Generic
 
+type Amount = Int
+type TradeNo = String
+type OrderId = String
 data TradeState = APPLY | SUCCESS | FAIL | EXCEPT deriving(Show,Eq)
 data TradeType = ORDER | REFUND | CHARGE deriving(Show,Eq)
 data PayMethod = WX | ALI | BALANCE deriving(Show,Eq)
@@ -31,7 +32,7 @@ data ServiceResponse = ServiceResponse ServiceState ServiceErrNo ServiceErrMsg S
                     deriving(Show,Eq)
 
 data PayResponse = UnifiedOrderResponse
-                 | WxRefundResponse
+                 | WxRefundResponse (Maybe String)
                  | AliPayResponse
                  | BalancePayResponse
                  | ChargeResponse
@@ -49,23 +50,7 @@ type Param = (Key,Value)
 type Params = [Param]
 type RequestBody = Writer Params
 
-data AppConfig = AppConfig {
-    wxAppId::String,
-    wxAppSecret::String,
-    wxPartnerKey::String,
-    wxMchId::String
-} deriving(Show,Eq)
-
-type QueryRequest = ReaderT (TradeRecord,AppConfig) RequestBody
-
--- class Xml a where
---     toXml :: a -> String
---     fromXml :: String -> a
---
--- instance Xml QueryResponse where
---     toXml (OrderQueryResponse params) = (\s -> "<xml>"++s++"</xml>") $ concat $ map (\(k,v) -> "<"++k++">"++v++"</"++k++">") params
---     fromXml xml = OrderQueryResponse []
---
--- instance Xml QueryRequest where
---     toXml (OrderQuery params) = (\s -> "<xml>"++s++"</xml>") $ concat $ map (\(k,v) -> "<"++k++">"++v++"</"++k++">") params
---     fromXml xml = OrderQuery []
+type ApiUrl = String
+type ApiParams = Params
+data Api = WxApi ApiUrl ApiParams
+         | AliApi ApiUrl ApiParams deriving(Show,Eq)

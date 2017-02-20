@@ -73,7 +73,7 @@ public class HttpsRequest {
     private static void ssl() {
         try {
             KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-            FileInputStream in = new FileInputStream("cert/apiclient_cert.p12");
+            FileInputStream in = new FileInputStream("cert/h5.p12");
             ks.load(in, "1262986701".toCharArray());
 
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());

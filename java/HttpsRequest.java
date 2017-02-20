@@ -1,42 +1,38 @@
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import java.io.*;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
-import java.util.Map;
-import javax.net.ssl.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 
 /**
  * Created by yangyy on 17-2-14.
  */
 public class HttpsRequest {
+
     public static String get(String url) {
         try {
             ssl();
             URL _url = new URL(url);
-            URLConnection conn = _url.openConnection();
+            HttpsURLConnection conn = (HttpsURLConnection) _url.openConnection();
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
             conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
             conn.setConnectTimeout(1000);
             conn.connect();
-            Map<String, List<String>> headerFields = conn.getHeaderFields();
-            for (String headerField : headerFields.keySet()) {
-                System.out.printf("FIELD:%s,VALUES:%s\n", headerField, headerFields.get(headerField));
-            }
             int bodyLen = conn.getContentLength();
-            System.out.printf("LENS:%d\n", bodyLen);
             char[] buff = new char[bodyLen];
             StringBuffer content = new StringBuffer();
             Reader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             reader.read(buff);
             content.append(buff);
-            System.out.printf("BODY:%s\n", content);
+            System.err.printf("%s\n", content);
             return content.toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,9 +43,9 @@ public class HttpsRequest {
     public static String post(String url, String data) {
         try {
             ssl();
-            System.out.printf("REQ:%s\n", data);
+            System.err.printf("%s\n", data);
             URL _url = new URL(url);
-            URLConnection conn = _url.openConnection();
+            HttpsURLConnection conn = (HttpsURLConnection) _url.openConnection();
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
             conn.setRequestProperty("content-type", "text/plain");
@@ -60,18 +56,13 @@ public class HttpsRequest {
             Writer writer = new PrintWriter(conn.getOutputStream());
             writer.write(data);
             writer.flush();
-            Map<String, List<String>> headerFields = conn.getHeaderFields();
-            for (String headerField : headerFields.keySet()) {
-                System.out.printf("FIELD:%s,VALUES:%s\n", headerField, headerFields.get(headerField));
-            }
             int bodyLen = conn.getContentLength();
-            System.out.printf("LENS:%d\n", bodyLen);
             char[] buff = new char[bodyLen];
             StringBuffer content = new StringBuffer();
             Reader reader = new InputStreamReader(conn.getInputStream());
             reader.read(buff);
             content.append(buff);
-            System.out.printf("BODY:\n%s\n", content);
+            System.err.printf("%s\n", content);
             return content.toString();
         } catch (Exception e) {
             e.printStackTrace();

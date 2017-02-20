@@ -66,8 +66,10 @@ executable paygate
   hs-source-dirs:      src
   java-sources:        java/HttpsRequest.java
                      , java/Utils.java
+  maven-repos:         http://maven.aliyun.com/nexus/content/groups/public/
   maven-depends:       com.mashape.unirest:unirest-java:1.4.9
                      , org.apache.thrift:libthrift:0.10.0
                      , org.apache.httpcomponents:httpclient:4.5.3
+                     , org.apache.logging.log4j:log4j-core:2.7
   -- Base language which the package is written in.
   default-language:    Haskell2010

@@ -3,3 +3,4 @@ dist/
 /java/HttpsRequest.class
 /java/Utils.class
 /cert/
+/src/Config.hs
